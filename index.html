@@ -14,8 +14,8 @@
             <h1>My library</h1>
         </div>
         <div class="page">
-            <div class="library" id="library-id">
-                <div class="book" id="shakespeare">
+            <div class="library" id="library">
+                <!-- <div class="book" id="shakespeare">
                    <div class="book-content">
                         <div class="book-title" id="book-title-id">Romeo and Juliet</div>
                         <div class="book-author" id="book-author-id">By: William Shakespeare</div>
@@ -23,32 +23,32 @@
                         <div class="book-read" id="book-read-id">Did I read it? Not yet.</div>
                     </div>
                     <div class="book-buttons">
-                        <button class="delete-book-btn">Delete book</button>
-                        <button class="change-reed-status-btn">Change read status</button>
+                        <button class="delete-book-btn" id="delete-book">Delete book</button>
+                        <button class="change-reed-status-btn" id="change-status">Change read status</button>
                     </div>
-                </div>
+                </div> -->
 
             </div>
             <div class="btn-add">
-                <button id="add-book" onclick="showDiv()">ADD NEW BOOK</button>
+                <button id="add-book">ADD NEW BOOK</button>
             </div>
-            <div class="add-new" id="add-new-book" style="display:none">
+            <div class="add-new" id="add-new-book">
                 <h2>Which book do you want to add?</h2>
                 <div class="my-form">
                     <div class="form-row">
-                        <label for="book-title">Title of the book:</label>
+                        <label for="book-title">Title of the book:*</label>
                         <input type="text" id="book-title" name="book-title">
                     </div>
                     <div class="form-row">
-                        <label for="book-author">Author:</label>
+                        <label for="book-author">Author:*</label>
                         <input type="text" id="book-author" name="book-author">
                     </div>
                     <div class="form-row">
-                        <label for="book-pages">Number of pages:</label>
-                        <input type="number" id="book-pages" name="book-pages">
+                        <label for="book-pages">Number of pages:*</label>
+                        <input type="number" min="0" max="2000" id="book-pages" name="book-pages">
                     </div>
                     <div class="form-row">
-                        <label for="book-read">Have you read it?</label>
+                        <label for="book-read">Have you read it?*</label>
                         <select id="book-read">
                             <option value="Yes!">Of course! 😍</option>
                             <option value="Not yet.">Not yet. 😭</option>
@@ -58,6 +58,7 @@
                         <button type="button" id="submit-button">Add to library!</button>
                         <button type="button" id="clear-button">Clear</button>
                     </div>
+                    <div class="required-text">* required</div>
                 </div>
             </div>
 

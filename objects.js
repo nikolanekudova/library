@@ -1,38 +1,21 @@
-let myLibrary = [];
-let title = "";
-let author = "";
-let pages = 0;
-let read = "";
-let book = {};
+let myLibrary = [
+    {
+        author: "William Shakespeare",
+        pages: "480",
+        read: "Yes!",
+        title: "Romeo and Juliet"
+    }
+];
+
 const submitButton = document.getElementById("submit-button");
 const addBookButton = document.getElementById("add-book");
 const clearButton = document.getElementById("clear-button");
-
-
-let myElementForBookTitle;
-let myElementForBookAuthor;
-let myElementForBookPages;
-let myElementForBookRead;
-let myElementForButtonDelete;
-let myElementForButtonChange;
-let myElementForButtons;
-
-submitButton.addEventListener("click", function(event) {
-    addBookToLibrary();
-});
-
-addBookButton.addEventListener("click", function(event) {
-    showDiv();
-})
-
-clearButton.addEventListener("click", function(event) {
-    clearForm();
-})
-
-
-function showDiv() {
-    document.getElementById("add-new-book").style.display = "";
-}
+const deleteButtons = document.querySelectorAll(".delete-book-btn");
+const changeButtons = document.querySelectorAll(".change-read-status-btn");
+const titleInput = document.getElementById("book-title");
+const authorInput = document.getElementById("book-author");
+const pagesInput = document.getElementById("book-pages");
+const readInput = document.getElementById("book-read");
 
 function Book(title, author, pages, read) {
     this.title = title;
@@ -41,93 +24,158 @@ function Book(title, author, pages, read) {
     this.read = read;
 }
 
-function addBookToLibrary() {
-    title = document.getElementById("book-title").value;
-    author = document.getElementById("book-author").value;
-    pages = document.getElementById("book-pages").value;
-    read = document.getElementById("book-read").value;
+renderHTML();
 
+addBookButton.addEventListener("click", function (event) {
+    showFormDiv();
+})
+
+submitButton.addEventListener("click", function (event) {
+    addBookToLibrary();
+});
+
+clearButton.addEventListener("click", function (event) {
     clearForm();
-    const book = new Book(title, author, pages, read);
+})
 
-    myLibrary.push(book);
+titleInput.addEventListener('focusout', (event) => {
+    setValidationClass(titleInput);
+})
 
-    deleteBooksFromLibrary();
+authorInput.addEventListener('focusout', (event) => {
+    setValidationClass(authorInput);
+})
 
-    addBookToDiv(myLibrary);
+pagesInput.addEventListener('focusout', (event) => {
+    setValidationClass(pagesInput);
+})
+
+function setValidationClass(inputElement) {
+    if (inputElement.value == "") {
+        inputElement.classList.add("empty-input");
+    } else {
+        inputElement.classList.remove("empty-input");
+    }
+}
+
+function showFormDiv() {
+    document.getElementById("add-new-book").style.visibility = "visible";
+}
+
+function addBookToLibrary() {
+    if (titleInput.value == "" || authorInput.value == "" || pagesInput.value == "") {
+        alert("You have to fill all inputs!");
+    } else {
+        const title = titleInput.value;
+        const author = authorInput.value;
+        const pages = pagesInput.value;
+        const read = readInput.value;
+
+        const newBook = new Book(title, author, pages, read);
+        myLibrary.push(newBook);
+
+        clearForm();
+        clearDOMLibrary();
+        renderHTML();
+    }
 }
 
 function clearForm() {
-    document.getElementById("book-title").value = "";
-    document.getElementById("book-author").value = "";
-    document.getElementById("book-pages").value = "";
+    titleInput.value = "";
+    authorInput.value = "";
+    pagesInput.value = "";
 }
 
-function addBookToDiv(myLibrary) {
+function renderHTML() {
     for (let i = 0; i < myLibrary.length; i++) {
+        const bookObject = myLibrary[i];
 
-        let myObject = myLibrary[i];
+        const bookWrapper = document.createElement("div");
+        bookWrapper.classList.add('book');
+        bookWrapper.setAttribute('id', i);
+        bookObject.id = i;
 
-        myElementForBook = document.createElement("div");
-        myElementForBook.classList.add('book', 'delete-book');
-        document.getElementById("library-id").appendChild(myElementForBook);
-        myElementForBook.setAttribute('id', [i])
-        console.log("id is: " + myElementForBook.id);
+        const bookContent = document.createElement("div");
+        bookContent.classList.add("book-content");
 
-        myElementForBookContent = document.createElement("div");
-        myElementForBookContent.classList.add("book-content");
-        myElementForBook.appendChild(myElementForBookContent);
+        const bookTitle = document.createElement("div");
+        bookTitle.innerHTML = bookObject.title;
+        bookTitle.classList.add("book-title");
 
-        myElementForBookTitle = document.createElement("div");
-        myElementForBookTitle.classList.add("book-title");
-        myElementForBookContent.appendChild(myElementForBookTitle);
+        const bookAuthor = document.createElement("div");
+        bookAuthor.innerHTML = "By: " + bookObject.author;
+        bookAuthor.classList.add("book-author");
 
-        myElementForBookAuthor = document.createElement("div");
-        myElementForBookAuthor.classList.add("book-author");
-        myElementForBookContent.appendChild(myElementForBookAuthor);
+        const bookPages = document.createElement("div");
+        bookPages.innerHTML = "Number of pages: " + bookObject.pages;
+        bookPages.classList.add("book-pages");
 
-        myElementForBookPages = document.createElement("div");
-        myElementForBookPages.classList.add("book-pages");
-        myElementForBookContent.appendChild(myElementForBookPages);
+        const bookRead = document.createElement("div");
+        bookRead.innerHTML = "Have I read it? " + bookObject.read;
+        bookRead.classList.add("book-read");
 
-        myElementForBookRead = document.createElement("div");
-        myElementForBookRead.classList.add("book-read");
-        myElementForBookContent.appendChild(myElementForBookRead);
+        const bookButtons = document.createElement("div");
+        bookButtons.classList.add("book-buttons");
 
-        myElementForButtons = document.createElement("div");
-        myElementForButtons.classList.add("book-buttons");
-        myElementForBook.appendChild(myElementForButtons);
+        const bookButtonDelete = document.createElement("button");
+        bookButtonDelete.innerHTML = "Delete book";
+        bookButtonDelete.classList.add("delete-book-btn");
 
-        myElementForButtonDelete = document.createElement("button");
-        myElementForButtonDelete.classList.add("delete-book-btn");
-        myElementForButtons.appendChild(myElementForButtonDelete).innerHTML = "Delete book";
+        const bookButtonRead = document.createElement("button");
+        bookButtonRead.innerHTML = "Change read status";
+        bookButtonRead.classList.add("change-read-status-btn");
 
-        myElementForButtonChange = document.createElement("button");
-        myElementForButtonChange.classList.add("change-reed-status-btn");
-        myElementForButtons.appendChild(myElementForButtonChange).innerHTML = "Change read status";
+        bookButtonDelete.addEventListener('click', deleteBook);
+        bookButtonRead.addEventListener('click', changeReadStatus);
 
+        bookWrapper.appendChild(bookContent);
+        bookContent.appendChild(bookTitle);
+        bookContent.appendChild(bookAuthor);
+        bookContent.appendChild(bookPages);
+        bookContent.appendChild(bookRead);
 
-        for (const property in myObject) {
-            //console.log(`${property}: ${myObject[property]}`)
+        bookWrapper.appendChild(bookButtons);
+        bookButtons.appendChild(bookButtonDelete);
+        bookButtons.appendChild(bookButtonRead)
 
-            if (property === "title") {
-                myElementForBookTitle.innerHTML = myObject[property];
-            } else if (property === "author") {
-                myElementForBookAuthor.innerHTML = "By: " + myObject[property];
-            } else if (property === "pages") {
-                myElementForBookPages.innerHTML = "Number of pages: " + myObject[property];
+        document.getElementById("library").appendChild(bookWrapper);
+    }
+}
+
+function clearDOMLibrary() {
+    const booksToDelete = document.querySelectorAll('.book');
+
+    booksToDelete.forEach(bookDiv => {
+        bookDiv.remove();
+    });
+}
+
+function deleteBook(event) {
+    if (confirm("Are you sure?")) {
+        myLibrary = myLibrary.filter(book => {
+            return book.id != event.target.parentElement.parentElement.id;
+        });
+
+        clearDOMLibrary();
+        renderHTML();
+    }
+}
+
+function changeReadStatus(event) {
+    for (let i = 0; i < myLibrary.length; i++) {
+        const bookObject = myLibrary[i];
+
+        if (bookObject.id == event.target.parentElement.parentElement.id) {
+            if (bookObject.read == "Yes!") {
+                bookObject.read = "Not yet."
             } else {
-                myElementForBookRead.innerHTML = "Did I read it? " + myObject[property];
+                bookObject.read = "Yes!"
             }
-        }
-
         }
     }
 
-function deleteBooksFromLibrary() {
-    const booksForDelete = document.querySelectorAll('.delete-book');
-    
-    booksForDelete.forEach(booksForDelete => {
-      booksForDelete.remove();
-    });
+    clearDOMLibrary();
+    renderHTML();
 }
+
+
